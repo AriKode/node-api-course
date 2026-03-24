@@ -13,13 +13,14 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  nom       String
-  email     String    @unique
-  password  String
-  role      String    @default("user")  // "user" | "admin"
-  createdAt DateTime  @default(now())
-  emprunts  Emprunt[]
+  id            Int            @id @default(autoincrement())
+  nom           String
+  email         String         @unique
+  password      String
+  role          String         @default("user")  // "user" | "admin"
+  createdAt     DateTime       @default(now())
+  emprunts      Emprunt[]
+  refreshTokens RefreshToken[]
 }
 
 model Livre {
@@ -42,4 +43,13 @@ model Emprunt {
   dateRetour  DateTime?
   livre       Livre     @relation(fields: [livreId], references: [id])
   user        User      @relation(fields: [userId], references: [id])
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 }

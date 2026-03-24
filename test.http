@@ -1,0 +1,77 @@
+### Variables
+@baseUrl = http://localhost:3000/api
+@token = TON_TOKEN_ICI
+
+### 1️⃣ Inscription d'un utilisateur (Création de compte)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123",
+  "nom": "Jean Dupont"
+}
+
+###
+
+### 2️⃣ Connexion (Obtient l'Access Token et le Refresh Token en cookie)
+# Copie l'access token retourné pour remplacer TON_TOKEN_ICI ci-dessus
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+
+### 3️⃣ Rafraîchir le token (Refresh Token) 
+# Assurez-vous d'avoir exécuté la requête de connexion avant.
+# REST Client gérera automatiquement le cookie HttpOnly !
+POST {{baseUrl}}/auth/refresh
+
+###
+
+### 4️⃣ Déconnexion (Logout)
+# Cela supprimera le Refresh Token dans la base de données et dans les cookies.
+POST {{baseUrl}}/auth/logout
+
+###
+
+### 5️⃣ Profil de l'utilisateur (Token requis)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+###
+
+### 6️⃣ Ajouter un livre (Token requis, rôle admin ou user)
+POST {{baseUrl}}/livres
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "titre": "Harry Potter",
+  "auteur": "J.K. Rowling",
+  "annee": 1997,
+  "genre": "Fantasy"
+}
+
+###
+
+### 7️⃣ Récupérer la liste de tous les livres (Public)
+GET {{baseUrl}}/livres
+
+###
+
+### 8️⃣ Interagir avec un livre : Emprunter (Token requis)
+# Remplacez "1" par l'ID réel d'un livre existant
+POST {{baseUrl}}/livres/1/emprunter
+Authorization: Bearer {{token}}
+
+###
+
+### 9️⃣ Interagir avec un livre : Retourner (Token requis)
+# Remplacez "1" par l'ID réel d'un livre existant
+POST {{baseUrl}}/livres/1/retourner
+Authorization: Bearer {{token}}
